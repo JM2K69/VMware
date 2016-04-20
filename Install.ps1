@@ -1,5 +1,4 @@
-﻿#update script
-$Folder = $PSScriptRoot
+﻿$Folder = $PSScriptRoot
 $Buildname = Split-Path -Leaf $Folder
 $wshell = New-Object -comObject WScript.Shell
 $Deskpath = $wshell.SpecialFolders.Item('Desktop')

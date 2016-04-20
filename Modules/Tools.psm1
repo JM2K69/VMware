@@ -435,7 +435,7 @@ function Receive-SRV2012R2
 							Show-BalloonTip -Text " Error Donwloading File $url , Please check connectivity" -Icon Error -Timeout 10 -Title "Downloading..."
 							exit
 						}
-						Unblock-File "$OSCM_BASEDir\$FileName"
+						Unblock-File "$OS_BASEDir\$FileName"
 					}
 				}
 			}
@@ -503,7 +503,7 @@ function Receive-Windows10
 							Show-BalloonTip -Text " Error Donwloading File $url , Please check connectivity" -Icon Error -Timeout 10 -Title "Downloading..."
 							exit
 						}
-						Unblock-File "$OSCM_BASEDir\$FileName"
+						Unblock-File "$OS_BASEDir\$FileName"
 						Show-BalloonTip -Text "Windows Windows 10 LSTB is now available in $OS_BASEDir" -Icon Info -Timeout 10 -Title "Downloading..."
 						
 					}
@@ -530,7 +530,7 @@ function Receive-Windows10
 							Show-BalloonTip -Text " Error Donwloading File $url , Please check connectivity" -Icon Error -Timeout 10 -Title "Downloading..."
 							exit
 						}
-						Unblock-File "$OSCM_BASEDir\$FileName"
+						Unblock-File "$OS_BASEDir\$FileName"
 						Show-BalloonTip -Text "Windows Windows 10 1511 is now available in $OS_BASEDir" -Icon Info -Timeout 10 -Title "Downloading..."
 						
 					}
@@ -1092,3 +1092,93 @@ function Show-BalloonTip
 	$balloon.ShowBalloonTip($Timeout)
 }
 
+function Receive-PowerShellV5
+{
+	[CmdletBinding(DefaultParametersetName = "1",
+				   SupportsShouldProcess = $true,
+				   ConfirmImpact = "Medium")]
+	[OutputType([psobject])]
+	param (
+		[ValidateSet('81&2012R2','2012')]
+		$OSVersions,
+		[ValidateSet('C:\HydrationCM\Source\Downloads')]
+		[String]$Destination,
+		[String]$Product_Dir = "PowerShellV5",
+		[switch]$force
+	)
+	$File1 = "https://download.microsoft.com/download/2/C/6/2C6E1B4A-EBE5-48A6-B225-2D2058A9CEFB/Win8.1AndW2K12R2-KB3134758-x64.msu"
+	$File2 = "https://download.microsoft.com/download/2/C/6/2C6E1B4A-EBE5-48A6-B225-2D2058A9CEFB/W2K12-KB3134759-x64.msu"
+	
+	$Product_Dir = Join-Path $Destination $Product_Dir
+	Write-Verbose "Destination: $Product_Dir"
+	if (!(Test-Path $Product_Dir))
+	{
+		Try
+		{
+			Write-Verbose "Trying to create $Product_Dir"
+			$NewDirectory = New-Item -ItemType Directory -Path "$Product_Dir" -ErrorAction Stop -Force
+		}
+		catch
+		{
+			Write-Verbose "Could not create Destination Directory $Product_Dir"
+			break
+		}
+	}
+	$Prereq_Dir = Join-Path $Destination $Prereq
+	Write-Verbose "Prereq = $Prereq_Dir"
+	Write-Verbose "We are now going to Test $File1"
+	Switch ($OSVersions)
+	{
+		"81&2012R2"
+		{
+			$OS_BASEVER = $OSVersions
+			$OS_BASEDir = Join-Path $Product_Dir $OS_BASEVER
+			if (!(Test-Path "$OS_BASEVER\PowerShellV5\Win8.1AndW2K12R2-KB3134758-x64.msu"))
+			{
+				foreach ($url in ($File1))
+				{
+					$FileName = Split-Path -Leaf -Path $Url
+					Write-Verbose "Testing $FileName in $OS_BASEDir"
+					if (!(test-path  "$OS_BASEDir\$FileName"))
+					{
+						Show-BalloonTip -Text " Trying Download PowerShell $OSVersions" -Icon Info -Timeout 10 -Title "Downloading..."
+						if (!(Receive-ToolsBitsFile -DownLoadUrl $URL -destination "$OS_BASEDir\$FileName"))
+						{
+							Show-BalloonTip -Text " Error Donwloading File $url , Please check connectivity" -Icon Error -Timeout 10 -Title "Downloading..."
+							exit
+						}
+						Unblock-File "$OS_BASEDir\$FileName"
+					}
+				}
+			}
+			
+		}
+		
+		"2012"
+		{
+			$OS_BASEVER = $OSVersions
+			$OS_BASEDir = Join-Path $Product_Dir $OS_BASEVER
+			if (!(Test-Path "$OS_BASEVER\PowerShellV5\W2K12-KB3134759-x64.msu"))
+			{
+				foreach ($url in ($File2))
+				{
+					$FileName = Split-Path -Leaf -Path $Url
+					Write-Verbose "Testing $FileName in $OS_BASEDir"
+					if (!(test-path  "$OS_BASEDir\$FileName"))
+					{
+						Show-BalloonTip -Text " Trying Download PowerShell $OSVersions" -Icon Info -Timeout 10 -Title "Downloading..."
+						if (!(Receive-ToolsBitsFile -DownLoadUrl $URL -destination "$OS_BASEDir\$FileName"))
+						{
+							Show-BalloonTip -Text " Error Donwloading File $url , Please check connectivity" -Icon Error -Timeout 10 -Title "Downloading..."
+							exit
+						}
+						Unblock-File "$OS_BASEDir\$FileName"
+					}
+				}
+			}
+			
+		}
+		
+	} #end switch
+	Show-BalloonTip -Text "PowerShell V 5 is now available in $OS_BASEDir" -Icon Info -Timeout 10 -Title "Download Finish"
+}

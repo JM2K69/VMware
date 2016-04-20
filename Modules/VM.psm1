@@ -1,20 +1,4 @@
-﻿<#	
-	===========================================================================
-	 Created with: 	SAPIEN Technologies, Inc., PowerShell Studio 2015 v4.2.81
-	 Created on:   	16/02/2016 12:11
-	 Created by:   	Jerome
-	 Organization: 	
-	 Filename:     	VM.psm1
-	-------------------------------------------------------------------------
-	 Module Name: VM
-	===========================================================================
-#>
-
-
-
-
-
-<#
+﻿<#
 	.SYNOPSIS
 		PS C:\HidrationCM\PowerShell>New-HydraInfraVM -VMName DC01 -Disksize 90GB -Size L.
 	
@@ -59,13 +43,13 @@ function New-HydraInfraVM
 	param
 	(
 		[Parameter(Mandatory = $true)]
-		[ValidateSet("DC01", "MDT01", "CM01", "PCA1", "PC001","PC002")]
+		[ValidateSet("DC01", "MDT01", "CM01", "PCA1", "PC001", "PC002")]
 		$VMName,
 		[Parameter(Mandatory = $true)]
 		[ValidateSet("90GB", "300GB")]
 		$Disksize,
 		[Parameter(Mandatory = $true)]
-		[ValidateSet("M", "L", "XXL",'XXXL')]
+		[ValidateSet("M", "L", "XXL", 'XXXL')]
 		$Size,
 		[Parameter(Mandatory = $true)]
 		[ValidateSet("Domain Controller", "PC Admin", "SCCM Server", "MDT Server", "PC Client")]
@@ -74,8 +58,8 @@ function New-HydraInfraVM
 		$Path
 	)
 	
-	if (!(Test-Path -path $Path)){New-Item $Path -Type Directory | Out-Null }
-		
+	if (!(Test-Path -path $Path)) { New-Item $Path -Type Directory | Out-Null }
+	
 	Switch ($VMName)
 	{
 		"DC01"
@@ -83,10 +67,10 @@ function New-HydraInfraVM
 			
 			
 			$path = (new-vmx -Type Server2012 -Firmware Bios -VMXName $VMName -Path $path).path
-			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName  -Path $path
-			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0  -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
-			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config  "$path`\$VMName.vmx"
-			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2  -config "$path`\$VMName.vmx"
+			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName -Path $path
+			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0 -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
+			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config "$path`\$VMName.vmx"
+			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2 -config "$path`\$VMName.vmx"
 			$VM = Set-VMXDisplayName -DisplayName $VMName -config "$path`\$VMName.vmx"
 			$VM = Connect-VMXcdromImage -VMXName $VMName -ISOfile C:\HydrationCM\ISO\HydrationCM.iso -config "$path`\$VMName.vmx"
 			$VM = Set-VMXAnnotation -VMXName $VMName -config "$path`\$VMName.vmx" -builddate -Line1 $Description -Line2 "EDITIONS ENI"
@@ -98,10 +82,10 @@ function New-HydraInfraVM
 		{
 			
 			$path = (new-vmx -Type Server2012 -Firmware Bios -VMXName $VMName -Path $path).path
-			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName  -Path $path
-			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0  -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
-			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config  "$path`\$VMName.vmx"
-			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2  -config "$path`\$VMName.vmx"
+			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName -Path $path
+			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0 -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
+			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config "$path`\$VMName.vmx"
+			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2 -config "$path`\$VMName.vmx"
 			$VM = Set-VMXDisplayName -DisplayName $VMName -config "$path`\$VMName.vmx"
 			$VM = Connect-VMXcdromImage -VMXName $VMName -ISOfile C:\HydrationCM\ISO\HydrationCM.iso -config "$path`\$VMName.vmx"
 			$VM = Set-VMXAnnotation -VMXName $VMName -config "$path`\$VMName.vmx" -builddate -Line1 $Description -Line2 "EDITIONS ENI"
@@ -111,10 +95,10 @@ function New-HydraInfraVM
 		{
 			
 			$path = (new-vmx -Type Server2012 -Firmware Bios -VMXName $VMName -Path $path).path
-			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName  -Path $path
-			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0  -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
-			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config  "$path`\$VMName.vmx"
-			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2  -config "$path`\$VMName.vmx"
+			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName -Path $path
+			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0 -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
+			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config "$path`\$VMName.vmx"
+			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2 -config "$path`\$VMName.vmx"
 			$VM = Set-VMXDisplayName -DisplayName $VMName -config "$path`\$VMName.vmx"
 			$VM = Connect-VMXcdromImage -VMXName $VMName -ISOfile C:\HydrationCM\ISO\HydrationCM.iso -config "$path`\$VMName.vmx"
 			$VM = Set-VMXAnnotation -VMXName $VMName -config "$path`\$VMName.vmx" -builddate -Line1 $Description -Line2 "EDITIONS ENI"
@@ -124,10 +108,10 @@ function New-HydraInfraVM
 		{
 			
 			$path = (new-vmx -Type Server2012 -Firmware Bios -VMXName $VMName -Path $path).path
-			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName  -Path $path
-			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0  -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
-			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config  "$path`\$VMName.vmx"
-			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2  -config "$path`\$VMName.vmx"
+			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName -Path $path
+			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0 -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
+			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config "$path`\$VMName.vmx"
+			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2 -config "$path`\$VMName.vmx"
 			$VM = Set-VMXDisplayName -DisplayName $VMName -config "$path`\$VMName.vmx"
 			$VM = Connect-VMXcdromImage -VMXName $VMName -ISOfile C:\HydrationCM\ISO\HydrationCM.iso -config "$path`\$VMName.vmx"
 			$VM = Set-VMXAnnotation -VMXName $VMName -config "$path`\$VMName.vmx" -builddate -Line1 $Description -Line2 "EDITIONS ENI"
@@ -137,10 +121,10 @@ function New-HydraInfraVM
 		{
 			
 			$path = (new-vmx -Type Server2012 -Firmware Bios -VMXName $VMName -Path $path).path
-			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName  -Path $path
-			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0  -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
-			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config  "$path`\$VMName.vmx"
-			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2  -config "$path`\$VMName.vmx"
+			$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName -Path $path
+			$VM = Add-VMXScsiDisk -Controller 0 -LUN 0 -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path`\$VMName.vmx"
+			$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config "$path`\$VMName.vmx"
+			$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2 -config "$path`\$VMName.vmx"
 			$VM = Set-VMXDisplayName -DisplayName $VMName -config "$path`\$VMName.vmx"
 			$VM = Connect-VMXcdromImage -VMXName $VMName -ISOfile C:\HydrationCM\ISO\HydrationCM.iso -config "$path`\$VMName.vmx"
 			$VM = Set-VMXAnnotation -VMXName $VMName -config "$path`\$VMName.vmx" -builddate -Line1 $Description -Line2 "EDITIONS ENI"
@@ -224,10 +208,9 @@ function New-HydraBlankVM
 		[ValidateSet("90GB", "300GB")]
 		$Disksize,
 		[Parameter(Mandatory = $true)]
-		[int]
-		$Number,
+		[int]$Number,
 		[Parameter(Mandatory = $true)]
-		[ValidateSet("XS", "S", "M", "L", "XL", "TXL", "XXL","XXXL")]
+		[ValidateSet("XS", "S", "M", "L", "XL", "TXL", "XXL", "XXXL")]
 		$Size,
 		[Parameter(Mandatory = $true)]
 		$Path
@@ -244,10 +227,10 @@ function New-HydraBlankVM
 			1..$Number | % {
 				$VMName = $Prefix + "{0:00}" -f $_
 				$path1 = (new-vmx -Type Server2012 -Firmware Bios -VMXName $VMName -Path $path).path
-				$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName  -Path $path1
-				$VM = Add-VMXScsiDisk -Controller 0 -LUN 0  -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path1`\$VMName.vmx"
-				$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config  "$path1`\$VMName.vmx"
-				$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2  -config "$path1`\$VMName.vmx"
+				$VM = New-VMXScsiDisk -NewDiskSize $Disksize -NewDiskname "$VMName.vmdk" -VMXName $VMName -Path $path1
+				$VM = Add-VMXScsiDisk -Controller 0 -LUN 0 -Diskname "$VMName.vmdk" -VMXName $VMName -config "$path1`\$VMName.vmx"
+				$VM = Set-VMXNetworkAdapter -Adapter 0 -ConnectionType custom -AdapterType e1000e -config "$path1`\$VMName.vmx"
+				$VM = Set-VMXVnet -Adapter 0 -Vnet vmnet2 -config "$path1`\$VMName.vmx"
 				$VM = Set-VMXDisplayName -DisplayName $VMName -config "$path1`\$VMName.vmx"
 				$VM = Connect-VMXcdromImage -VMXName $VMName -ISOfile C:\HydrationCM\ISO\HydrationCM.iso -config "$path1`\$VMName.vmx"
 				$VM = Set-VMXAnnotation -VMXName $VMName -config "$path1`\$TargetVM.vmx" -builddate -Line1 "Blank Virtual Machine" -Line2 "EDITIONS ENI"
@@ -262,6 +245,8 @@ function New-HydraBlankVM
 
 Export-ModuleMember New-HydraInfraVM
 Export-ModuleMember New-HydraBlankVM
+
+
 
 
 

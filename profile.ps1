@@ -44,18 +44,16 @@ $size.height = 5000
 $Userinterface.BufferSize = $size
 $size = $Userinterface.WindowSize
 $size.width = 126
-$size.height = 42.5
+$size.height = 40
 $Userinterface.WindowSize = $size
-$size = $Userinterface.MaxWindowSize
-$size.width = 191
-$size.height = 63
-$Userinterface.MaxWindowSize = $size
 $Userinterface.WindowTitle = "HydrationKit PowerShell VMware Workstation"
 
 clear-host
 import-module .\Modules\vmxtoolkit.psm1 -Force
 import-module .\Modules\Tools.psm1 -Force
 Import-Module .\Modules\VM.psm1 -Force
+
+
 write-host
 Write-Host -ForegroundColor Magenta '   
 
